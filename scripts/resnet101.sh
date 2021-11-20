@@ -2,14 +2,14 @@
 
 fg_threshold=0.40
 bg_threshold=0.10
-EXPERIMENT_NAME=resnet50
+EXPERIMENT_NAME=resnet101
 
 python -m make_affinity_labels \
    --experiment_name ${EXPERIMENT_NAME} \
    --domain train_aug \
    --fg_threshold ${fg_threshold} \
    --bg_threshold ${bg_threshold} \
-   --pred_dir ../resim/results/pipeline/resnet50v2/irnet/make_cam/seg-model-224/cam_outputs/
+   --pred_dir ../resim/results/pipeline/resnet101v2/irnet/make_cam/seg-model-249/cam_outputs/
 
 python -m train_affinitynet \
   --architecture ${EXPERIMENT_NAME} \
@@ -19,7 +19,7 @@ python -m train_affinitynet \
 python -m inference_rw \
   --architecture ${EXPERIMENT_NAME} \
   --model_name AffinityNet@${EXPERIMENT_NAME}@aff_fg=${fg_threshold}_bg=${bg_threshold} \
-  --cam_dir ../resim/results/pipeline/resnet50v2/irnet/make_cam/seg-model-224/cam_outputs/ \
+  --cam_dir ../resim/results/pipeline/resnet101v2/irnet/make_cam/seg-model-249/cam_outputs/ \
   --domain train_aug
 
 python evaluate.py \
@@ -42,7 +42,8 @@ python train_segmentation.py \
  --mode fix \
  --use_gn True \
  --tag DeepLabv3+resnet101@${EXPERIMENT_NAME}@aff_fg=${fg_threshold}_bg=${bg_threshold}@Fix@GN \
- --label_name AffinityNet@${EXPERIMENT_NAME}@aff_fg=${fg_threshold}_bg=${bg_threshold}@train@beta=10@exp_times=8@rw@crf=1
+ --label_name AffinityNet@${EXPERIMENT_NAME}@aff_fg=${fg_threshold}_bg=${bg_threshold}@train@beta=10@exp_times=8@rw@crf=1 \
+ --batch_size 16
 
 python inference_segmentation.py \
   --backbone ${EXPERIMENT_NAME} \
