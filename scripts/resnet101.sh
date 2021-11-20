@@ -32,12 +32,12 @@ python -m make_pseudo_labels \
   --threshold 0.20 \
   --crf_iteration 1
 
-python evaluate.py \
+python -m evaluate \
   --experiment_name AffinityNet@${EXPERIMENT_NAME}@aff_fg=${fg_threshold}_bg=${bg_threshold}@train@beta=10@exp_times=8@rw@crf=1 \
   --domain train \
   --mode png
 
-python train_segmentation.py \
+python -m train_segmentation \
  --backbone resnet101 \
  --mode fix \
  --use_gn True \
@@ -45,15 +45,27 @@ python train_segmentation.py \
  --label_name AffinityNet@${EXPERIMENT_NAME}@aff_fg=${fg_threshold}_bg=${bg_threshold}@train@beta=10@exp_times=8@rw@crf=1 \
  --batch_size 16
 
-python inference_segmentation.py \
-  --backbone ${EXPERIMENT_NAME} \
+python -m inference_segmentation_test \
+  --backbone resnet101 \
   --mode fix \
   --use_gn True \
   --tag DeepLabv3+resnet101@${EXPERIMENT_NAME}@aff_fg=${fg_threshold}_bg=${bg_threshold}@Fix@GN \
   --scale 0.5,1.0,1.5,2.0 \
-  --iteration 10
-
-python -m evaluate \
-  --experiment_name DeepLabv3+resnet101@${EXPERIMENT_NAME}@aff_fg=${fg_threshold}_bg=${bg_threshold}@Fix@GN@val@scale=0.5,1.0,1.5,2.0@iteration=10 \
+  --iteration 10 \
   --domain val
+
+python evaluate.py \
+  --experiment_name DeepLabv3+resnet101@${EXPERIMENT_NAME}@aff_fg=${fg_threshold}_bg=${bg_threshold}@Fix@GN@val@scale=0.5,1.0,1.5,2.0@iteration=10 \
+  --domain val \
+  --mode png
+
+python -m inference_segmentation_test \
+  --backbone resnet101 \
+  --mode fix \
+  --use_gn True \
+  --tag DeepLabv3+resnet101@${EXPERIMENT_NAME}@aff_fg=${fg_threshold}_bg=${bg_threshold}@Fix@GN \
+  --scale 0.5,1.0,1.5,2.0 \
+  --iteration 10 \
+  --domain test \
+  --data_dir ../vision/data/raw/test/VOCdevkit/VOC2012/
 
