@@ -69,3 +69,4 @@ python -m inference_segmentation_test \
   --domain test \
   --data_dir ../vision/data/raw/test/VOCdevkit/VOC2012/
 
+
