@@ -4,6 +4,8 @@
 import copy
 import sys
 
+import torchvision.transforms as T
+
 from core.datasets import *
 from core.networks import *
 from tools.ai.augment_utils import *
@@ -166,11 +168,30 @@ if __name__ == "__main__":
             # cv2.imshow('GT', decode_from_colormap(gt_mask, dataset.colors))
             # cv2.waitKey(0)
             ###############################################################################
-
             if args.domain == "test":
-                pred_mask = decode_from_colormap(pred_mask, dataset.colors)[..., ::-1]
+                label_path = "../vision/data/raw/VOCdevkit/VOC2012/SegmentationClass/2007_000032.png"
+                label_img = Image.open(label_path)
+                color_palette = label_img.getpalette()
 
-            imageio.imwrite(pred_dir + image_id + ".png", pred_mask.astype(np.uint8))
+                label_prediction = pred_mask.astype(np.uint8)
+                pred_mask = T.ToPILImage()(label_prediction).convert("P")
+                pred_mask.putpalette(color_palette)
+                pred_mask.save(pred_dir + image_id + ".png")
+            if args.domain == "val":
+                imageio.imwrite(
+                    pred_dir + image_id + ".png", pred_mask.astype(np.uint8)
+                )
+
+                label_path = "../vision/data/raw/VOCdevkit/VOC2012/SegmentationClass/2007_000032.png"
+                label_img = Image.open(label_path)
+                color_palette = label_img.getpalette()
+
+                label_prediction = pred_mask.astype(np.uint8)
+                pred_mask = T.ToPILImage()(label_prediction).convert("P")
+                pred_mask.putpalette(color_palette)
+                folder = os.path.join(pred_dir, "submission")
+                os.makedirs(folder, exist_ok=True)
+                pred_mask.save(os.path.join(folder, image_id + ".png"))
 
             sys.stdout.write(
                 "\r# Make CAM [{}/{}] = {:.2f}%".format(
