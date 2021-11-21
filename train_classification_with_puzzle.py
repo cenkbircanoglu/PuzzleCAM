@@ -25,7 +25,7 @@ parser = argparse.ArgumentParser()
 ###############################################################################
 # Dataset
 ###############################################################################
-parser.add_argument("--seed", default=0, type=int)
+parser.add_argument("--seed", default=3407, type=int)
 parser.add_argument("--num_workers", default=4, type=int)
 parser.add_argument("--data_dir", default="../VOCtrainval_11-May-2012/", type=str)
 

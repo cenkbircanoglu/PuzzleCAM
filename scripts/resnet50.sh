@@ -12,12 +12,12 @@ python -m make_affinity_labels \
    --pred_dir ../resim/results/pipeline/resnet50v2/irnet/make_cam/seg-model-224/cam_outputs/
 
 python -m train_affinitynet \
-  --architecture ${EXPERIMENT_NAME} \
+  --architecture resnet50 \
   --tag AffinityNet@${EXPERIMENT_NAME}@aff_fg=${fg_threshold}_bg=${bg_threshold} \
   --label_name ${EXPERIMENT_NAME}@aff_fg=${fg_threshold}_bg=${bg_threshold}
 
 python -m inference_rw \
-  --architecture ${EXPERIMENT_NAME} \
+  --architecture resnet50 \
   --model_name AffinityNet@${EXPERIMENT_NAME}@aff_fg=${fg_threshold}_bg=${bg_threshold} \
   --cam_dir ../resim/results/pipeline/resnet50v2/irnet/make_cam/seg-model-224/cam_outputs/ \
   --domain train_aug
