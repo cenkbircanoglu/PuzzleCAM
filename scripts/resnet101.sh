@@ -22,7 +22,7 @@ python -m inference_rw \
   --cam_dir ../resim/results/pipeline/resnet101v2/irnet/make_cam/seg-model-249/cam_outputs/ \
   --domain train_aug
 
-python evaluate.py \
+python -m evaluate \
   --experiment_name AffinityNet@${EXPERIMENT_NAME}@aff_fg=${fg_threshold}_bg=${bg_threshold}@train@beta=10@exp_times=8@rw \
   --domain train
 
@@ -54,7 +54,7 @@ python -m inference_segmentation_test \
   --iteration 10 \
   --domain val
 
-python evaluate.py \
+python -m evaluate \
   --experiment_name DeepLabv3+resnet101@${EXPERIMENT_NAME}@aff_fg=${fg_threshold}_bg=${bg_threshold}@Fix@GN@val@scale=0.5,1.0,1.5,2.0@iteration=10 \
   --domain val \
   --mode png
